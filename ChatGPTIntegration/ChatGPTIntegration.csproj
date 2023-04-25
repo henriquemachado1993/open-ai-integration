@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-ChatgptStudy-CEB3FDE8-B3CD-428C-AB65-5D5BF5EB9299</UserSecretsId>
+    <UserSecretsId>aspnet-ChatGPTIntegration-5A0A303B-B30D-45ED-8F63-FEC5ACD0BE59</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,11 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\ServiceApplication\ServiceApplication.csproj" />
-    <ProjectReference Include="..\ServicesChatGPT\ServicesChatGPT.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
