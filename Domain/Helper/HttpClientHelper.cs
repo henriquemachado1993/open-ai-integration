@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Domain.ValueObjects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,23 +20,28 @@ namespace Domain.Helper
             return httpClient;
         }
 
-        public static async Task<T> GetAsync<T>(string requestUri, string mediaType = "application/json")
+        public static async Task<BusinessResult<T>> GetAsync<T>(string requestUri, string mediaType = "application/json")
         {
             using (var httpClient = CreateHttpClient(mediaType))
             {
                 var response = await httpClient.GetAsync(requestUri);
 
-                if (response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<T>(json);
+                    var errorContent = string.Empty;
+                    using (var responseStream = await response.Content.ReadAsStreamAsync())
+                    using (var streamReader = new StreamReader(responseStream))
+                        errorContent = await streamReader.ReadToEndAsync();
+
+                    return BusinessResult<T>.CreateInvalidResult(errorContent);
                 }
 
-                return default;
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<BusinessResult<T>>(json);
             }
         }
 
-        public static async Task<TResponse> PostAsync<TRequest, TResponse>(string requestUri, TRequest request, string mediaType = "application/json")
+        public static async Task<BusinessResult<TResponse>> PostAsync<TRequest, TResponse>(string requestUri, TRequest request, string mediaType = "application/json")
         {
             using (var httpClient = CreateHttpClient())
             {
@@ -44,13 +50,19 @@ namespace Domain.Helper
 
                 var response = await httpClient.PostAsync(requestUri, content);
 
-                if (response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
-                    var responseJson = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<TResponse>(responseJson);
+                    var errorContent = string.Empty;
+                    using (var responseStream = await response.Content.ReadAsStreamAsync())
+                    using (var streamReader = new StreamReader(responseStream))
+                        errorContent = await streamReader.ReadToEndAsync();
+
+                    return BusinessResult<TResponse>.CreateInvalidResult(errorContent);
+
                 }
 
-                return default;
+                var responseJson = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<BusinessResult<TResponse>>(responseJson);
             }
         }
 
