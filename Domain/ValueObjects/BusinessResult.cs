@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Domain.Enums;
 
@@ -29,6 +30,7 @@ namespace Domain.ValueObjects
         public T Data { get; set; }
         public List<MessageResult> Messages { get; set; }
         public string Token { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
 
         public bool IsValid
         {
@@ -50,9 +52,10 @@ namespace Domain.ValueObjects
             return new BusinessResult<T>(default);
         }
 
-        public static BusinessResult<T> CreateInvalidResult(string message)
+        public static BusinessResult<T> CreateInvalidResult(HttpStatusCode statusCode, string message)
         {
             var result = new BusinessResult<T>(default);
+            result.StatusCode = statusCode;
             result.Messages = AddError(message);
 
             return result;

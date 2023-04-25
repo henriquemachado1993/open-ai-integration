@@ -2,6 +2,8 @@ using ChatgptStudy.Data;
 using Domain.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ServicesChatGPT.Interfaces;
+using ServicesChatGPT.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
+
+#region Dependecy injection
+
+builder.Services.AddScoped<IChatGPTService, ChatGPTService>();
+
+#endregion
 
 var app = builder.Build();
 

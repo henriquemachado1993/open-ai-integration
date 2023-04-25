@@ -1,4 +1,5 @@
-﻿using ServicesChatGPT.Models.Completion;
+﻿using Domain.ValueObjects;
+using ServicesChatGPT.Models.Completion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace ServicesChatGPT.Interfaces
 {
     public interface IChatGPTService
     {
-        Task<ChatCompletionResponse> CompletionsAsync(ChatCompletionRequest request);
+        Task<BusinessResult<ChatCompletionResponse>> CompletionsAsync(ChatCompletionRequest request);
     }
 }
