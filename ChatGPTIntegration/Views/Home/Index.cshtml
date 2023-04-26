@@ -19,9 +19,6 @@
                                 </div>
                             </div>
                             <div class="col-lg-6 hidden-sm text-right">
-                                <a href="javascript:void(0);" class="btn btn-outline-secondary">
-                                    <i class="fa fa-camera"></i>
-                                </a>
                                 <a href="javascript:void(0);" class="btn btn-outline-primary">
                                     <i class="fa fa-image"></i>
                                 </a>
@@ -41,12 +38,16 @@
                         <div class="chat-message clearfix">
                             <div class="input-group mb-0">
                                 <input name="message" id="message-user" type="text" class="form-control" placeholder="Pergunte algo ao ChatGPT...">
+                                <input type="hidden" id="aux-recording" value="stopped">
                                 <div class="input-group-prepend">
-                                    <button type="button" onclick="SendMessage()"><span class="input-group-text-custom"><i class="fa fa-send"></i></span></button>
+                                    <button type="submit" style="border: 0px !important;" title="Enviar uma mensagem"><span class="input-group-text-custom"><i class="fa fa-send"></i></span></button>
+                                    <button type="button" style="border: 0px !important;" title="Gravar áudio" id="record"><span class="input-group-text-custom"><i class="fa fa-microphone"></i></span></button>
                                 </div>
                             </div>
                         </div>
                     </form>
+                    <p id="status" style="display: none">Escutando...</p>
+                    
                 </div>
             </div>
         </div>
@@ -66,8 +67,11 @@
         divChatHistory.innerHTML = htmlChatHistory;
     }
 
-    function SendMessage(){
-        const form = document.querySelector('#form-send-message');
+    const form = document.querySelector('#form-send-message');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Previne o envio padrão do formulário
+
         const formData = new FormData(form);
 
         fetch('/Home/SendMessage', {
@@ -80,7 +84,8 @@
         .catch(error => {
              console.log(error);
         });
-    }
+
+    });
 
 </script>
 
