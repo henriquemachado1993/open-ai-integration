@@ -4,6 +4,8 @@ using ServicesChatGPT.Interfaces;
 using ServicesChatGPT.Models.Completion;
 using System.Net.Http;
 using Domain.Extensions;
+using Newtonsoft.Json;
+using ServicesChatGPT.Models.Error;
 
 namespace ServicesChatGPT.Services
 {
@@ -33,7 +35,13 @@ namespace ServicesChatGPT.Services
                 var contentError = string.Empty;
                 using (var responseStream = await response.Content.ReadAsStreamAsync())
                 using (var streamReader = new StreamReader(responseStream))
-                    contentError = await streamReader.ReadToEndAsync();
+                {
+                    var jsonContentError = await streamReader.ReadToEndAsync();
+                    var error = JsonConvert.DeserializeObject<RootError>(jsonContentError);
+                    contentError = error?.error?.message;
+                }
+                    
+
 
                 return BusinessResult<ChatCompletionResponse>.CreateInvalidResult(response.StatusCode, $"Error: {contentError}");
             }

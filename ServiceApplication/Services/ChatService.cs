@@ -41,6 +41,9 @@ namespace ServiceApplication.Services
                     }
                 });
 
+            if (!response.IsValid)
+                return BusinessResult<ChatResponse>.CreateInvalidResult(response.Messages.Select(x => x.Message));
+
             var responseChatGpt = response.Data.Choices?.Select(x => x.Message)?.FirstOrDefault()?.Content ?? string.Empty;
 
             var chatResponse = new ChatResponse()

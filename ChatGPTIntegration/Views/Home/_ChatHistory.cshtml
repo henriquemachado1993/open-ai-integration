@@ -1,0 +1,34 @@
+﻿@using ChatGPTIntegration.Models.Chat
+@using Domain.Models
+@using System.Globalization
+@using Domain.Models.Chat
+@model ChatHistory
+
+<ul class="m-b-0">
+
+    @{
+        var typeMessage = string.Empty;
+        var textRight = string.Empty;
+        var floatRight = string.Empty;
+    }
+
+    @if (Model != null && Model.Chat.Any())
+    {
+        @foreach (var item in Model.Chat)
+        {
+
+            typeMessage = item.IsReplyUser ? "other-message" : "my-message";
+            textRight = item.IsReplyUser ? "text-right" : "";
+            floatRight = item.IsReplyUser ? "float-right" : "";
+
+            <li class="clearfix">
+                <div class="message-data @textRight">
+                    <span class="message-data-time">@item.Date.ToString("h:mm tt, ddd", DateTimeFormatInfo.InvariantInfo)</span>
+                </div>
+                <div class="message @typeMessage @floatRight">
+                    @item.Messagem
+                </div>
+            </li>
+        }
+    }
+</ul>
