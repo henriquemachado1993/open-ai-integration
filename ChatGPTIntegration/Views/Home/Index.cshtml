@@ -57,6 +57,8 @@
 
 <script>
 
+    LoadChatHistory();
+
     async function LoadChatHistory(){
         const response = await fetch('/Home/GetChatHistory');
         const htmlChatHistory = await response.text();
