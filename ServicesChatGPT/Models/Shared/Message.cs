@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ServicesChatGPT.Models.Shared
@@ -12,10 +13,12 @@ namespace ServicesChatGPT.Models.Shared
         /// <summary>
         /// The role of the author of this message. One of "system", "user", or "assistant".
         /// </summary>
-        public Role Role { get; set; }
+        [JsonPropertyName("role")]
+        public string Role { get; set; }
         /// <summary>
         /// The contents of the message.
         /// </summary>
+        [JsonPropertyName("content")]
         public string Content { get; set; }
         /// <summary>
         /// The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters.

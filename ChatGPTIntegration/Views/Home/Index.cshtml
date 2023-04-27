@@ -38,16 +38,20 @@
                         <div class="chat-message clearfix">
                             <div class="input-group mb-0">
                                 <input name="message" id="message-user" type="text" class="form-control" placeholder="Pergunte algo ao ChatGPT...">
+                                <input type="hidden" id="message-transcript-final" name="messageTranscriptFinal">
                                 <input type="hidden" id="aux-recording" value="stopped">
                                 <div class="input-group-prepend">
-                                    <button type="submit" style="border: 0px !important;" title="Enviar uma mensagem"><span class="input-group-text-custom"><i class="fa fa-send"></i></span></button>
-                                    <button type="button" style="border: 0px !important;" title="Gravar áudio" id="record"><span class="input-group-text-custom"><i class="fa fa-microphone"></i></span></button>
+                                    <button type="submit" style="display: none"></button>
+                                    <button type="button" style="border: 0px !important; outline: 0px auto -webkit-focus-ring-color !important;" title="Gravar áudio" id="record">
+                                        <span class="input-group-text-custom">
+                                            <i id="btn-icon-recording" class="fa fa-microphone" style="margin: 0px 6px;"></i>
+                                            <div id="animation-recording" style="height: 27px; display: none; padding-bottom:5px;"></div>
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <p id="status" style="display: none">Escutando...</p>
-                    
                 </div>
             </div>
         </div>
@@ -56,36 +60,37 @@
 
 @section Scripts {
 
+<script src="~/js/settings-animations-lottie.js"></script>
+
 <script>
 
-    LoadChatHistory();
+        LoadChatHistory();
 
-    async function LoadChatHistory(){
-        const response = await fetch('/Home/GetChatHistory');
-        const htmlChatHistory = await response.text();
-        const divChatHistory = document.getElementById('chat-history-user');
-        divChatHistory.innerHTML = htmlChatHistory;
-    }
+        async function LoadChatHistory(){
+            const response = await fetch('/Home/GetChatHistory');
+            const htmlChatHistory = await response.text();
+            const divChatHistory = document.getElementById('chat-history-user');
+            divChatHistory.innerHTML = htmlChatHistory;
+        }
 
-    const form = document.querySelector('#form-send-message');
+        const form = document.querySelector('#form-send-message');
 
-    form.addEventListener('submit', (event) => {
-        event.preventDefault(); // Previne o envio padrão do formulário
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Previne o envio padrão do formulário
 
-        const formData = new FormData(form);
+            const formData = new FormData(form);
 
-        fetch('/Home/SendMessage', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            LoadChatHistory();
-        })
-        .catch(error => {
-             console.log(error);
+            fetch('/Home/SendMessage', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                LoadChatHistory();
+            })
+            .catch(error => {
+                 console.log(error);
+            });
         });
-
-    });
 
 </script>
 

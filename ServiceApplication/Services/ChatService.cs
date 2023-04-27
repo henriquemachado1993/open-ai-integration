@@ -34,7 +34,7 @@ namespace ServiceApplication.Services
                     {
                         new Message()
                         {
-                            Role = Role.user,
+                            Role = Role.user.ToString(),
                             Content = request.Message,
                             Name = request.UserInfo.Name,
                         }

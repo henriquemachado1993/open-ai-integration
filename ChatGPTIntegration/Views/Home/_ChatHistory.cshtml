@@ -23,10 +23,10 @@
 
             <li class="clearfix">
                 <div class="message-data @textRight">
-                    <span class="message-data-time">@item.Date.ToString("h:mm tt, ddd", DateTimeFormatInfo.InvariantInfo)</span>
+                    <span class="message-data-time">@item.Date.ToString("h:mm:ss tt, ddd", DateTimeFormatInfo.InvariantInfo)</span>
                 </div>
                 <div class="message @typeMessage @floatRight">
-                    @item.Messagem
+                    @Html.Raw(@item.Messagem) 
                 </div>
             </li>
         }

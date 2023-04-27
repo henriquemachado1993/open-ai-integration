@@ -1,5 +1,6 @@
 ﻿using Domain.Helpers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,12 +54,13 @@ namespace ServicesChatGPT.Helper
             {
                 SerializerSettings = new JsonSerializerSettings
                 {
-                    Formatting = Formatting.None,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                    //Formatting = Formatting.None,
+                    //NullValueHandling = NullValueHandling.Ignore,
+                    //ObjectCreationHandling = ObjectCreationHandling.Replace
                 }
             };
             formatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+            formatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             return formatter;
         }
