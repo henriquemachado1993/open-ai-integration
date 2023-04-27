@@ -19,5 +19,18 @@ namespace Domain.Models.Chat
         /// É o usuário da resposta?
         /// </summary>
         public bool IsReplyUser { get; set; }
+
+        /// <summary>
+        /// Identifica se é um áudio
+        /// </summary>
+        public bool IsAudio { get; set; }
+        public FileAudio FileAudio { get; set; }
+    }
+
+    public class FileAudio
+    {
+        public string Name { get; set; }
+        public string Extension { get; set; }
+        public string AudioInBase64 { get; set; }
     }
 }

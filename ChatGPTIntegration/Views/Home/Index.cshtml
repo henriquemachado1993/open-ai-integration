@@ -19,8 +19,8 @@
                                 </div>
                             </div>
                             <div class="col-lg-6 hidden-sm text-right">
-                                <a href="javascript:void(0);" class="btn btn-outline-primary">
-                                    <i class="fa fa-image"></i>
+                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalUploadFile" title="Anexar arquivo de áudio">
+                                    <i class="fa fa-file-audio-o"></i>
                                 </a>
                                 <a href="javascript:void(0);" class="btn btn-outline-info">
                                     <i class="fa fa-cogs"></i>
@@ -41,7 +41,7 @@
                         <div class="chat-message clearfix">
                             <div class="input-group mb-0">
                                 <input name="message" id="message-user" type="text" class="form-control" placeholder="Pergunte algo ao ChatGPT...">
-                                
+
                                 <input type="hidden" id="message-transcript-final" name="messageTranscriptFinal">
                                 <input type="hidden" id="aux-recording" value="stopped">
                                 <div class="input-group-prepend">
@@ -62,14 +62,39 @@
     </div>
 </div>
 
+<!-- Modal upload file -->
+<div class="modal fade" id="modalUploadFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Upload de Arquivo de áudio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form-upload-audio" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" id="file">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 
 <script src="~/js/settings-animations-lottie.js"></script>
 
 <script>
 
+    // Carrega o histórico de conversas
     LoadChatHistory();
-
     async function LoadChatHistory(){
 
         startLogading();
@@ -82,12 +107,11 @@
         stopLogading();
     }
 
+    // Formulário para envio de mensagens
     const form = document.querySelector('#form-send-message');
-
     form.addEventListener('submit', (event) => {
         startLogading();
-
-        event.preventDefault(); // Previne o envio padrão do formulário
+        event.preventDefault();
 
         const formData = new FormData(form);
 
@@ -100,12 +124,59 @@
             stopLogading();
         })
         .catch(error => {
-            console.log(error);
+            alert(error);
             stopLogading();
         });
-
         document.querySelector("#message-user").value = "";
     });
+
+    // Formulário para envio de arquivos de áudio
+    const formUploadAudio = document.querySelector('#form-upload-audio');
+    formUploadAudio.addEventListener('submit', (evento) => {
+        $('#modalUploadFile').modal('hide');
+        startLogading();
+        evento.preventDefault();
+
+        const arquivo = document.querySelector('input[type=file]').files[0];
+        const formData = new FormData();
+        formData.append('FormFile', arquivo);
+
+        fetch('/Home/SendMessageAudio', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            LoadChatHistory();
+            stopLogading();
+        })
+        .catch(error => {
+            alert(error);
+            stopLogading();
+        });
+    });
+
+    // reprodução de áudio
+    let audio;
+    function reproduceAudio(idAudio){
+        var audioInBase64 = document.querySelector("#" + idAudio).value;
+        const bytes = atob(audioInBase64)
+        .split('')
+        .map(char => char.charCodeAt(0));
+
+        // Cria um objeto Blob com o tipo MIME do arquivo de áudio
+        const blob = new Blob([new Uint8Array(bytes)], { type: 'audio/mp3' });
+
+        // Cria um objeto URL do JavaScript com o blob e o reproduz
+        const audioUrl = URL.createObjectURL(blob);
+        audio = new Audio(audioUrl);
+        audio.play();
+    }
+
+    function stopAudio(){
+        if (audio) {
+            audio.pause();
+        }
+    }
 
 </script>
 

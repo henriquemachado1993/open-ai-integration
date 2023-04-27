@@ -5,6 +5,7 @@ using ServicesChatGPT.Enums;
 using ServicesChatGPT.Interfaces;
 using ServicesChatGPT.Models.Completion;
 using ServicesChatGPT.Models.Shared;
+using ServicesChatGPT.Models.Transcriptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,30 @@ namespace ServiceApplication.Services
             {
                 Question = new QuestionAnswer() { Messagem = request.Message },
                 Answer = new QuestionAnswer() { Messagem = responseChatGpt }
+            };
+
+            return BusinessResult<ChatResponse>.CreateValidResult(chatResponse);
+        }
+
+        public async Task<BusinessResult<ChatResponse>> TranscriptionsAsync(ChatRequest request)
+        {
+            var response = await _chatGPTService.TranscriptionsAsync(
+                new TranscriptionsRequest()
+                {
+                    Model = "whisper-1",
+                    File = request.FormFile.OpenReadStream(),
+                    FormFile = request.FormFile
+                });
+
+            if (!response.IsValid)
+                return BusinessResult<ChatResponse>.CreateInvalidResult(response.Messages.Select(x => x.Message));
+
+            var responseChatGpt = response.Data.Text ?? "Nada foi respondido pelo ChatGPT";
+
+            var chatResponse = new ChatResponse()
+            {
+                Question = new QuestionAnswer() { Messagem = request.Message },
+                Answer = new QuestionAnswer() { Messagem = $"Transcrição: {responseChatGpt}" }
             };
 
             return BusinessResult<ChatResponse>.CreateValidResult(chatResponse);

@@ -6,6 +6,7 @@
 <ul class="m-b-0">
 
     @{
+        var idAudioInBase64 = string.Empty;
         var typeMessage = string.Empty;
         var textRight = string.Empty;
         var floatRight = string.Empty;
@@ -15,7 +16,7 @@
     {
         @foreach (var item in Model.Chat)
         {
-
+            idAudioInBase64 = Guid.NewGuid().ToString();
             typeMessage = item.IsReplyUser ? "other-message" : "my-message";
             textRight = item.IsReplyUser ? "text-right" : "";
             floatRight = item.IsReplyUser ? "float-right" : "";
@@ -25,8 +26,19 @@
                     <span class="message-data-time">@item.Date.ToString("h:mm:ss tt, ddd", DateTimeFormatInfo.InvariantInfo)</span>
                 </div>
                 <div class="message @typeMessage @floatRight">
-                    @Html.Raw(@item.Messagem) 
+                    @Html.Raw(@item.Messagem)
+
+                    @if (item.FileAudio != null && !string.IsNullOrEmpty(item.FileAudio.AudioInBase64))
+                    {
+                        <a href="javascript:void(0);" onclick="reproduceAudio('@idAudioInBase64')">Reproduzir</a>
+                        <a href="javascript:void(0);" onclick="stopAudio()">Pausar</a>
+                    }
+
                 </div>
+                @if (item.FileAudio != null && !string.IsNullOrEmpty(item.FileAudio.AudioInBase64))
+                {
+                    <input type="hidden" id="@idAudioInBase64" name="@idAudioInBase64" value="@item.FileAudio.AudioInBase64">
+                }
             </li>
         }
     }
