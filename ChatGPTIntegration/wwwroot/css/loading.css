@@ -1,0 +1,11 @@
+﻿#lottie-container-loading{
+    width: 40px;
+}
+
+.start-loading {
+    display: block;
+}
+
+.stop-loading {
+    display: none;
+}

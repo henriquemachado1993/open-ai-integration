@@ -39,8 +39,9 @@
 
             document.querySelector("#aux-recording").value = "recording";
             speechRecognition.start();
-        } else {
 
+            document.querySelector("#message-user").value = "";
+        } else {
             document.querySelector("#aux-recording").value = "stopped";
             speechRecognition.stop();
             transcript = "";

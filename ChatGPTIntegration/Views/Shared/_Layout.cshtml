@@ -296,6 +296,7 @@
 
 <body>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/loading.css" rel="stylesheet" />
 
     <main role="main" class="pb-3">
         @RenderBody()
@@ -310,6 +311,8 @@
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>*@
+
+    <script src="~/js/loading.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

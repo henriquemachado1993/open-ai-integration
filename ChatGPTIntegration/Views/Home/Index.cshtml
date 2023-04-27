@@ -34,10 +34,14 @@
                     <div id="chat-history-user" class="chat-history">
                         @await Html.PartialAsync("_ChatHistory")
                     </div>
+
+                    <div id="lottie-container-loading" class="stop-loading" style="margin-left: 47%;"></div>
+
                     <form id="form-send-message">
                         <div class="chat-message clearfix">
                             <div class="input-group mb-0">
                                 <input name="message" id="message-user" type="text" class="form-control" placeholder="Pergunte algo ao ChatGPT...">
+                                
                                 <input type="hidden" id="message-transcript-final" name="messageTranscriptFinal">
                                 <input type="hidden" id="aux-recording" value="stopped">
                                 <div class="input-group-prepend">
@@ -64,33 +68,45 @@
 
 <script>
 
-        LoadChatHistory();
+    LoadChatHistory();
 
-        async function LoadChatHistory(){
-            const response = await fetch('/Home/GetChatHistory');
-            const htmlChatHistory = await response.text();
-            const divChatHistory = document.getElementById('chat-history-user');
-            divChatHistory.innerHTML = htmlChatHistory;
-        }
+    async function LoadChatHistory(){
 
-        const form = document.querySelector('#form-send-message');
+        startLogading();
 
-        form.addEventListener('submit', (event) => {
-            event.preventDefault(); // Previne o envio padrão do formulário
+        const response = await fetch('/Home/GetChatHistory');
+        const htmlChatHistory = await response.text();
+        const divChatHistory = document.getElementById('chat-history-user');
+        divChatHistory.innerHTML = htmlChatHistory;
 
-            const formData = new FormData(form);
+        stopLogading();
+    }
 
-            fetch('/Home/SendMessage', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                LoadChatHistory();
-            })
-            .catch(error => {
-                 console.log(error);
-            });
+    const form = document.querySelector('#form-send-message');
+
+    form.addEventListener('submit', (event) => {
+        startLogading();
+
+        event.preventDefault(); // Previne o envio padrão do formulário
+
+        const formData = new FormData(form);
+
+        fetch('/Home/SendMessage', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            LoadChatHistory();
+            stopLogading();
+        })
+        .catch(error => {
+            console.log(error);
+            stopLogading();
         });
+
+        document.querySelector("#message-user").value = "";
+
+    });
 
 </script>
 
