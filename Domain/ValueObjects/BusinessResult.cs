@@ -52,6 +52,14 @@ namespace Domain.ValueObjects
             return new BusinessResult<T>(default);
         }
 
+        public static BusinessResult<T> CreateInvalidResult(string message)
+        {
+            var result = new BusinessResult<T>(default);
+            result.Messages = AddError(message);
+
+            return result;
+        }
+
         public static BusinessResult<T> CreateInvalidResult(HttpStatusCode statusCode, string message)
         {
             var result = new BusinessResult<T>(default);

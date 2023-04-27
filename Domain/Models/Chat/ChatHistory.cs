@@ -21,6 +21,11 @@ namespace Domain.Models.Chat
         public bool IsReplyUser { get; set; }
 
         /// <summary>
+        /// Identifica se é uma mensagem de erro
+        /// </summary>
+        public bool IsError { get; set; }
+
+        /// <summary>
         /// Identifica se é um áudio
         /// </summary>
         public bool IsAudio { get; set; }

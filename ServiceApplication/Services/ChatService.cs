@@ -55,6 +55,15 @@ namespace ServiceApplication.Services
 
         public async Task<BusinessResult<ChatResponse>> TranscriptionsAsync(ChatRequest request)
         {
+            // verificar se formato que foi passado está de acordo
+            var listFormtsValid = new List<string>()
+            {
+                ".mp3", ".mp4", ".mpeg", ".mpga", ".m4a",".wav" ,".webm"
+            };
+            var extensionFile = Path.GetExtension(request.FormFile.FileName);
+            if (!listFormtsValid.Contains(extensionFile))
+                return BusinessResult<ChatResponse>.CreateInvalidResult("Não foi possível realizar a transcrição. Formatos de arquivos permitidos: mp3, mp4, mpeg, mpga, m4a, wav, or webm");
+            
             var response = await _chatGPTService.TranscriptionsAsync(
                 new TranscriptionsRequest()
                 {

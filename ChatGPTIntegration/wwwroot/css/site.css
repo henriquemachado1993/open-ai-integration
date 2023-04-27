@@ -184,6 +184,11 @@ body {
         text-align: right
     }
 
+    .chat .chat-history .other-message-error {
+        background: #ffbdbd;
+        text-align: right
+    }
+
         .chat .chat-history .other-message:after {
             border-bottom-color: #e8f1f3;
             left: 93%

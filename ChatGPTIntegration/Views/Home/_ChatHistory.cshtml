@@ -17,7 +17,7 @@
         @foreach (var item in Model.Chat)
         {
             idAudioInBase64 = Guid.NewGuid().ToString();
-            typeMessage = item.IsReplyUser ? "other-message" : "my-message";
+            typeMessage = item.IsError && item.IsReplyUser ? "other-message-error" : item.IsReplyUser ? "other-message" : "my-message";
             textRight = item.IsReplyUser ? "text-right" : "";
             floatRight = item.IsReplyUser ? "float-right" : "";
 
@@ -30,8 +30,9 @@
 
                     @if (item.FileAudio != null && !string.IsNullOrEmpty(item.FileAudio.AudioInBase64))
                     {
-                        <a href="javascript:void(0);" onclick="reproduceAudio('@idAudioInBase64')">Reproduzir</a>
-                        <a href="javascript:void(0);" onclick="stopAudio()">Pausar</a>
+                        <br />
+                        <a href="javascript:void(0);" onclick="reproduceAudio('@idAudioInBase64')" class="btn btn-outline-primary"><i class="fa fa-play-circle" aria-hidden="true"></i> Reproduzir</a>
+                        <a href="javascript:void(0);" onclick="stopAudio()" class="btn btn-outline-danger"><i class="fa fa-pause-circle" aria-hidden="true"></i> Pausar</a>
                     }
 
                 </div>

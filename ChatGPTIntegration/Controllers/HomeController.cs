@@ -52,16 +52,18 @@ namespace ChatGPTIntegration.Controllers
         [HttpPost]
         public IActionResult SendMessageAudio(MessageRequestModel request)
         {
-            _chatHistoryService.AddAsync(new Chat() { 
-                IsReplyUser = false, 
-                Date = DateTime.Now, IsAudio = true, 
-                Messagem= $"Arquivo enviado para transcrição: {request.FormFile?.FileName}", 
+            _chatHistoryService.AddAsync(new Chat()
+            {
+                IsReplyUser = false,
+                Date = DateTime.Now,
+                IsAudio = true,
+                Messagem = $"Arquivo enviado para transcrição: {request.FormFile?.FileName}",
                 FileAudio = new FileAudio() { Name = request.FormFile?.FileName ?? "", Extension = request.FormFile?.ContentType ?? "", AudioInBase64 = ConvertIFormFileToBase64(request.FormFile) }
             });
 
             if (request.FormFile == null)
             {
-                _chatHistoryService.AddAsync(new Chat() { IsReplyUser = true, Messagem = "Você deve anexar um arquivo de áudio. Formatos permitidos: mp3, mp4, mpeg, mpga, m4a, wav, or webm.", Date = DateTime.Now });
+                _chatHistoryService.AddAsync(new Chat() { IsError = true, IsReplyUser = true, Messagem = "Você deve anexar um arquivo de áudio. Formatos permitidos: mp3, mp4, mpeg, mpga, m4a, wav, or webm.", Date = DateTime.Now });
                 return PartialView("_ChatHistory", _chatHistoryService.GetAsync());
             }
 
@@ -71,7 +73,7 @@ namespace ChatGPTIntegration.Controllers
             // Trata retorno com erro
             if (!responseService.IsValid)
             {
-                _chatHistoryService.AddAsync(new Chat() { IsReplyUser = true, Messagem = string.Join(" | ", responseService.Messages.Select(x => x.Message)), Date = DateTime.Now });
+                _chatHistoryService.AddAsync(new Chat() { IsError = true, IsReplyUser = true, Messagem = string.Join(" | ", responseService.Messages.Select(x => x.Message)), Date = DateTime.Now });
                 return PartialView("_ChatHistory", _chatHistoryService.GetAsync());
             }
 

@@ -158,7 +158,7 @@
     // reprodução de áudio
     let audio;
     function reproduceAudio(idAudio){
-        var audioInBase64 = document.querySelector("#" + idAudio).value;
+        var audioInBase64 = document.getElementById(idAudio).value;
         const bytes = atob(audioInBase64)
         .split('')
         .map(char => char.charCodeAt(0));
