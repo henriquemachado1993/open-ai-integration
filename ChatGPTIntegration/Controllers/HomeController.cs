@@ -1,6 +1,4 @@
-﻿using ChatGPTIntegration.Models;
-using ChatGPTIntegration.Models.Chat;
-using ChatGPTIntegration.Models.Message;
+﻿using ChatGPTIntegration.Models.Message;
 using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +8,6 @@ namespace ChatGPTIntegration.Controllers
 {
     public class HomeController : Controller
     {
-        /// <summary>
-        /// Eu mesmo
-        /// </summary>
-        private UserInfo ISelf = new UserInfo() { Id = "Me123", Name = "Henrique machado" };
-
         private readonly IChatService _chatService;
         private readonly IChatHistoryService _chatHistoryService;
 
@@ -29,7 +22,7 @@ namespace ChatGPTIntegration.Controllers
             return View();
         }
 
-        [HttpGet("Home/GetChatHistory")]
+        [HttpGet]
         public async Task<IActionResult> GetChatHistory()
         {
             return PartialView("_ChatHistory", await _chatHistoryService.GetAsync());
@@ -40,17 +33,17 @@ namespace ChatGPTIntegration.Controllers
         {
             _chatHistoryService.AddAsync(new Domain.Models.Chat.Chat() { IsReplyUser = false, Date = DateTime.Now, Messagem = request.Message });
 
-            var responseChatGPT = _chatService.CompletionsAsync(new ChatRequest() { Message = request.Message, UserInfo = ISelf }).Result;
+            // Pesquisa no chat
+            var responseService = _chatService.CompletionsAsync(new ChatRequest() { Message = request.Message }).Result;
             
-            if (!responseChatGPT.IsValid)
+            // Trata retorno com erro
+            if (!responseService.IsValid)
             {
-                _chatHistoryService.AddAsync(new Domain.Models.Chat.Chat() { IsReplyUser = true, Messagem = string.Join(" | ", responseChatGPT.Messages.Select(x => x.Message)), Date = DateTime.Now });
-
+                _chatHistoryService.AddAsync(new Domain.Models.Chat.Chat() { IsReplyUser = true, Messagem = string.Join(" | ", responseService.Messages.Select(x => x.Message)), Date = DateTime.Now });
                 return PartialView("_ChatHistory", _chatHistoryService.GetAsync());
             }
 
-            // Colocar uma validação de erro na resposta
-            _chatHistoryService.AddAsync(new Domain.Models.Chat.Chat() { IsReplyUser = true, Messagem = responseChatGPT.Data.ChatAnswer.Messagem, Date = DateTime.Now });
+            _chatHistoryService.AddAsync(new Domain.Models.Chat.Chat() { IsReplyUser = true, Messagem = responseService.Data.Answer.Messagem, Date = DateTime.Now });
 
             return PartialView("_ChatHistory", _chatHistoryService.GetAsync());
         }

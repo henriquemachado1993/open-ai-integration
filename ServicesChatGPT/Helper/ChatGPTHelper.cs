@@ -54,9 +54,9 @@ namespace ServicesChatGPT.Helper
             {
                 SerializerSettings = new JsonSerializerSettings
                 {
-                    //Formatting = Formatting.None,
-                    //NullValueHandling = NullValueHandling.Ignore,
-                    //ObjectCreationHandling = ObjectCreationHandling.Replace
+                    Formatting = Formatting.None,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ObjectCreationHandling = ObjectCreationHandling.Replace
                 }
             };
             formatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());

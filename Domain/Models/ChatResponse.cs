@@ -8,9 +8,15 @@ namespace Domain.Models
 {
     public class ChatResponse
     {
-        public string KeyChat { get; set; }
-        public QuestionAnswer UserQuestion { get; set; }
-        public QuestionAnswer ChatAnswer { get; set; }
+        /// <summary>
+        /// Pergunta
+        /// </summary>
+        public QuestionAnswer Question { get; set; }
+
+        /// <summary>
+        /// Resposta
+        /// </summary>
+        public QuestionAnswer Answer { get; set; }
 
     }
 
@@ -18,6 +24,5 @@ namespace Domain.Models
     {
         public DateTime Date { get; set; }
         public string Messagem { get; set; }
-        public UserInfo UserInfo { get; set; }
     }
 }

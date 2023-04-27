@@ -1,5 +1,4 @@
 using ChatGPTIntegration.Data;
-using ChatGPTIntegration.Models.Chat;
 using Domain.Interfaces;
 using Domain.Models.Chat;
 using Microsoft.AspNetCore.Identity;
@@ -27,6 +26,7 @@ builder.Services.AddScoped<IChatGPTService, ChatGPTService>();
 
 builder.Services.AddSingleton<ChatHistory>();
 builder.Services.AddSingleton<IChatHistoryService, ChatHistoryService>();
+
 #endregion
 
 var app = builder.Build();

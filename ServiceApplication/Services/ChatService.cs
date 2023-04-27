@@ -24,8 +24,6 @@ namespace ServiceApplication.Services
 
         public async Task<BusinessResult<ChatResponse>> CompletionsAsync(ChatRequest request)
         {
-            request.UserInfo = new UserInfo() { Name = "Usuário XPTO" };
-
             var response = await _chatGPTService.CompletionsAsync(
                 new ChatCompletionRequest()
                 {
@@ -36,7 +34,6 @@ namespace ServiceApplication.Services
                         {
                             Role = Role.user.ToString(),
                             Content = request.Message,
-                            Name = request.UserInfo.Name,
                         }
                     }
                 });
@@ -44,12 +41,12 @@ namespace ServiceApplication.Services
             if (!response.IsValid)
                 return BusinessResult<ChatResponse>.CreateInvalidResult(response.Messages.Select(x => x.Message));
 
-            var responseChatGpt = response.Data.Choices?.Select(x => x.Message)?.FirstOrDefault()?.Content ?? string.Empty;
+            var responseChatGpt = response.Data.Choices?.Select(x => x.Message)?.FirstOrDefault()?.Content ?? "Nada foi respondido pelo ChatGPT";
 
             var chatResponse = new ChatResponse()
             {
-                UserQuestion = new QuestionAnswer() { Messagem = request.Message, UserInfo = new UserInfo() { Name = request.UserInfo.Name } },
-                ChatAnswer = new QuestionAnswer() { Messagem = responseChatGpt, UserInfo = new UserInfo() { Name = "ChatGPT" } }
+                Question = new QuestionAnswer() { Messagem = request.Message },
+                Answer = new QuestionAnswer() { Messagem = responseChatGpt }
             };
 
             return BusinessResult<ChatResponse>.CreateValidResult(chatResponse);
