@@ -1,4 +1,4 @@
-<h1 align="center">ChatGPT Integration</h1>
+<h1 align="center">Integração OpenAI</h1>
 <p align="center"><i>Repositório para versionamento e documentação do projeto.</i></p>
 
 ##  Sobre o projeto
