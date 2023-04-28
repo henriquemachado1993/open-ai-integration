@@ -9,7 +9,7 @@ O projeto tem como objetivo a criação de um chatbot que integra-se com a OpenA
 <p display="inline-block">
   <img width="48" src="https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg" alt=".NET Core 6"/>
   <img width="48" src="https://cdn.iconscout.com/icon/free/png-512/free-javascript-1-225993.png?f=avif&w=256" alt="javascript"/>
-  <img width="48" src="https://static1.lottiefiles.com/images/logo/lottiefiles-logo.svg" alt="lottie" />
+  <img width="48" src="https://play-lh.googleusercontent.com/2VNrlf-gc2gUspYuqAe7oijQG9BaaK_0F9DkSqh8gYUqKDzIguBwzEdfY5ms1Olid8w=s48-rw" alt="lottie" />
   <img width="48" src="https://upload.wikimedia.org/wikipedia/commons/4/4d/OpenAI_Logo.svg" alt="OpenAI" />
 </p>
                                                                                                   
